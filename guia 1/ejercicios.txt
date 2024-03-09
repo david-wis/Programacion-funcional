@@ -96,4 +96,8 @@ Ejercicio 8)
 \f -> \x -> f ( f ( f ( f x)))
 
 
-
+Ejercicio 9)
+a) f = id
+b) f (x,y) = x
+c) f (x,y) = x
+d) f (x,y) = y
