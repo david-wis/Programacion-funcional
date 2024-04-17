@@ -72,3 +72,47 @@ unzip' [] = ([], [])
 unzip' (x:xs) = let (a, b) = x 
                     (as, bs) = unzip' xs
                     in (a:as, b:bs)
+
+
+laMasLarga :: [[a]] -> [a]
+laMasLarga [] = error "no hay lista"
+laMasLarga [xs] = xs
+laMasLarga (xs:xss) = let m = laMasLarga xss in 
+                      if length xs > length m
+                      then xs
+                      else m
+    
+elemBy :: (a -> a -> Bool) -> a -> [a] -> Bool
+elemBy _ _ [] = False
+elemBy p e (x:xs) = p e x || elemBy p e xs
+
+drop' :: Int -> [a] -> [a]
+drop' 0 xs = xs
+drop' n xs = case xs of 
+               (y:ys) -> drop' (n-1) ys
+               _ -> []
+
+take' :: Int -> [a] -> [a]
+take' 0 xs = []
+take' n [] = []
+take' n (x:xs) = x : take' (n-1) xs
+
+dropWhile' :: (a->Bool) -> [a] -> [a]
+dropWhile' p [] = []
+dropWhile' p (x:xs) = if p x 
+                      then dropWhile' p xs
+                      else x:xs
+                      
+
+takeWhile' :: (a->Bool) -> [a] -> [a]
+takeWhile' p [] = []
+takeWhile' p (x:xs) = if p x 
+                      then x:(takeWhile' p xs)
+                      else []
+
+
+
+
+
+
+
