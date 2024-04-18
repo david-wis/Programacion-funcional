@@ -1,3 +1,6 @@
+import S2
+
+
 data ExpA = Cte Int
           | Suma ExpA ExpA
           | Prod ExpA ExpA
@@ -39,3 +42,22 @@ contarCeros :: ExpA -> ExpA -> Int
 contarCeros (Cte 0) _ = 1
 contarCeros _ (Cte 0) = 1
 contarCeros _ _ = 0
+
+-------------------------------------------------
+
+data ExpS = CteS N
+            | SumS ExpS ExpS
+            | ProdS ExpS ExpS
+            deriving Show
+            
+evalES :: ExpS -> Int
+evalES (CteS n) = evalN n 
+evalEs (SumS e1 e2) = evalES e1 + evalES e2
+evalEs (ProdS e1 e2) = evalES e1 * evalES e2
+
+es2ExpA :: ExpS -> ExpA
+es2ExpA (CteS n) = Cte (evalN n)
+es2ExpA (SumS e1 e2) = Suma (es2ExpA e1) (es2ExpA e2)
+es2ExpA (ProdS e1 e2) = Prod (es2ExpA e1) (es2ExpA e2)
+
+

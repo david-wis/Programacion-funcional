@@ -93,12 +93,12 @@ drop' n xs = case xs of
                _ -> []
 
 take' :: Int -> [a] -> [a]
-take' 0 xs = []
-take' n [] = []
+take' 0 _ = []
+take' _ [] = []
 take' n (x:xs) = x : take' (n-1) xs
 
 dropWhile' :: (a->Bool) -> [a] -> [a]
-dropWhile' p [] = []
+dropWhile' _ [] = []
 dropWhile' p (x:xs) = if p x 
                       then dropWhile' p xs
                       else x:xs
@@ -107,7 +107,7 @@ dropWhile' p (x:xs) = if p x
 takeWhile' :: (a->Bool) -> [a] -> [a]
 takeWhile' p [] = []
 takeWhile' p (x:xs) = if p x 
-                      then x:(takeWhile' p xs)
+                      then x : takeWhile' p xs
                       else []
 
 

@@ -1,3 +1,5 @@
+module S2 where
+
 -- Ej 1)
 
 data N = Z | S N
@@ -136,6 +138,17 @@ addDigBinWithCarry I I I = (I, I)
 nb2n :: NBin -> N
 nb2n [] = Z
 nb2n xs = S (nb2n (decNB xs))
+
+nb2n' :: NBin -> N
+nb2n' [] = Z
+nb2n' xs = nb2nPot xs 1 1
+
+nb2nPot :: NBin -> Int -> Int -> N
+nb2nPot [] _ _ = Z
+nb2nPot (O:xs) _ p' = nb2nPot xs (2*p') (2*p')
+nb2nPot (I:xs) 1 p' = S(nb2nPot xs (2*p') (2*p'))
+nb2nPot xs p p' = S(nb2nPot xs (p-1) p')
+
 
 -- vi)
 n2bn :: N -> NBin 
