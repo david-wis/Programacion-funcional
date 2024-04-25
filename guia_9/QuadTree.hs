@@ -55,8 +55,13 @@ uncompressWithHeight (LeafQ e) 0 = LeafQ e
 uncompressWithHeight (LeafQ e) h = let t' = uncompressWithHeight (LeafQ e) (h-1) in NodeQ t' t' t' t'
 uncompressWithHeight (NodeQ t1 t2 t3 t4) h = NodeQ (uncompressWithHeight t1 (h-1)) (uncompressWithHeight t2 (h-1)) (uncompressWithHeight t3 (h-1)) (uncompressWithHeight t4 (h-1))
 
+-- Precondicion: n = 4^k >= heightQT t
 render :: Image -> Int -> Image 
-render = uncompressWithHeight
+render img n = uncompressWithHeight img (log4int n)
+
+log4int :: Int -> Int
+log4int 1 = 0
+log4int n = 1 + log4int (n `div` 4)
 
 createBigImage =
     NodeQ (NodeQ (LeafQ (RGB 255 0 0)) (LeafQ (RGB 255 0 0)) (LeafQ (RGB 255 0 0)) (LeafQ (RGB 255 0 0))) (NodeQ (LeafQ (RGB 255 255 255)) (LeafQ (RGB 128 128 128)) (LeafQ (RGB 64 64 64)) (LeafQ (RGB 0 0 0))) (NodeQ (LeafQ (RGB 255 127 127)) (LeafQ (RGB 127 255 127)) (LeafQ (RGB 127 127 255)) (LeafQ (RGB 255 255 255))) (NodeQ (LeafQ (RGB 0 255 255)) (LeafQ (RGB 255 0 255)) (LeafQ (RGB 255 255 0)) (LeafQ (RGB 0 0 0)))
