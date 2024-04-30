@@ -72,12 +72,12 @@ cfBAnd :: BExp -> BExp -> BExp
 cfBAnd (BCte True) e2 = e2
 cfBAnd e1 (BCte True)  = e1 
 cfBAnd (BCte False) e2 = BCte False
-cfBAnd e1 (BCte False)  = BCte False
+-- cfBAnd e1 (BCte False)  = BCte False
 cfBAnd b1 b2  = And b1 b2
 
 cfBOr :: BExp -> BExp -> BExp
 cfBOr (BCte True) e2 = BCte True
-cfBOr e1 (BCte True)  = BCte True
+-- cfBOr e1 (BCte True)  = BCte True
 cfBOr (BCte False) e2 = e2
 cfBOr e1 (BCte False)  = e1 
 cfBOr b1 b2  = Or b1 b2
