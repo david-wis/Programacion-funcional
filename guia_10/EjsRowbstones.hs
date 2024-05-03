@@ -76,35 +76,28 @@ binOpTieneTipoBool YTambien = True
 binOpTieneTipoBool OBien = True
 binOpTieneTipoBool _ = False
 
+
+many 0 f x = x
+many n f x = f (many (n-1) f x)
+
 -- v)
 evalR :: ComandoR -> TableroR -> TableroR
 evalR (Mover dir) t = mover dir t
 evalR Poner t = poner t
 evalR Sacar t = sacar t
 evalR NoOp t = t
-evalR (Repetir e c) t = evalR (repetir2Secuencia (evalExpRInt e t) c) t
-evalR (Mientras e c) t = evalR (mientras2Secuencia e c t) t
+evalR (Repetir e c) t =  many (evalExpRInt e t) (evalR c) t 
+evalR (Mientras e c) t = while e c t 
 evalR (Secuencia c1 c2) t = (evalR c2 . evalR c1) t
 
 
-evalR' :: ComandoR -> TableroR -> TableroR
-evalR' (Mover dir) = mover dir
-evalR' Poner = poner
-evalR' Sacar = sacar
-evalR' NoOp = id
-evalR' (Repetir e c) = subst ((evalR' . flip repetir2Secuencia c) . evalExpRInt e) id
-evalR' (Mientras e c) = subst (evalR' . mientras2Secuencia e c) id
-evalR' (Secuencia c1 c2) = evalR' c2 . evalR' c1
-
+while :: ExpR Bool -> ComandoR -> TableroR -> TableroR
+while be c t = if evalExpRBool be t then while be c (evalR c t) else t
 
 repetir2Secuencia :: Int -> ComandoR -> ComandoR
 repetir2Secuencia 0 _ = NoOp
 repetir2Secuencia n c = Secuencia c (repetir2Secuencia (n-1) c)
 
-mientras2Secuencia :: ExpR Bool -> ComandoR -> TableroR -> ComandoR
-mientras2Secuencia e c t = if evalExpRBool e t 
-                           then Secuencia c (Mientras e c)
-                           else NoOp
 
 subst f g x = f x (g x)
 
