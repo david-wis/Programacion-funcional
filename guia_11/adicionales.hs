@@ -1,4 +1,4 @@
--- Adicional clase 11
+-- Bonus
 recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
 recr z _ [] = z
 recr z f (x:xs) = f x xs (recr z f xs)
@@ -13,5 +13,11 @@ recr'' z f = df (foldr rp (const z))
                  rp x h [] = f x [] (h [])
                  rp x h (_:ys) = f x ys (h ys)
 
+recr''' :: b -> (a -> [a] -> b -> b) -> [a] -> b
+recr''' z f xs = appDup (foldr rp (const z) xs) xs
+           where appDup g y = g (y, y)
+                 rp x h ([], _) = f x [] (h ([], []))
+                 rp x h (_:ys, _) = f x ys (h (ys, ys))
+
 foldr' :: (a -> b -> b) -> b -> [a] -> b
-foldr' f = flip recr (const . f)
+foldr' = flip recr . (const .)
