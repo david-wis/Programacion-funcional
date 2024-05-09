@@ -83,32 +83,33 @@ addDigBinWithCarry I I I = (I, I)
 
 type NU = [()] 
 ack :: NU -> NU -> NU
--- ack = recr (():) ackRec
---       where ackRec _ xs h [] = ack xs [()]
---             ackRec x xs h (y:ys) = []
+-- ack = recr (():) (\_ xs h ys -> case ys of 
+--                               [] -> h [()]
+--                               (_:zs) -> h (ack (():xs) zs)) 
 
+-- Version con recursion explicita
 -- ack [] = \ys -> ():ys
 -- ack (_:xs) = \ys -> case ys of 
 --                       [] -> ack xs [()]
 --                       (_:zs) -> ack xs (ack (():xs) zs)
 
-ack = recr (():) (\_ xs h ys -> case ys of 
-                              [] -> h [()]
-                              (_:zs) -> h (ack (():xs) zs)) 
+-- h = ack xs
+-- Prop: si xs = (_:zs)
+-- ack xs [y0,y1,...,yn] = ack zs (ack zs [y1,...,yn]) = ... = ack zs (ack zs ... (ack xs []) )
+-- Y por definicion ack xs [] = ack zs [()]
 
-ack' :: NU -> NU -> NU
-ack' = df (foldr rp (\_ r -> ():r))
-           where df g y = g y y
-                 rp _ h ls@(_:ys) []     = h ys [()]
-                 rp _ h (_:ys) (_:zs) = h ys (ack' (():ys) zs)
+-- V1:
+-- ack = foldr (\_ h -> \zs -> foldr (\_ rs -> h rs) (h [()]) zs) (():)
 
-            --      rp x h (_:ys) = redAck x ys (h ys)
-            --      redAck _ _ h [] = h [()]
-            --      redAck _ xs h (_:zs) = h (ack' (():xs) zs)
+-- Version optimizada:
+ack = foldr (const (subst (foldr . const) ($ succNU []))) succNU
+-- ack = foldr (const (subst (foldr . const) (flip ($) (succNU [])))) succNU
 
+succNU :: NU -> NU
+succNU = (():)
 
 ackInts :: Int -> Int -> Int
-ackInts nu1 nu2 = evalNU $ ack' (int2NU nu1) (int2NU nu2)
+ackInts nu1 nu2 = evalNU $ ack (int2NU nu1) (int2NU nu2)
 
 evalNU :: NU -> Int
 evalNU = foldr (const (+1)) 0
