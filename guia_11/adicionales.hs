@@ -102,7 +102,9 @@ ack :: NU -> NU -> NU
 -- ack = foldr (\_ h -> \zs -> foldr (\_ rs -> h rs) (h [()]) zs) (():)
 
 -- Version optimizada:
-ack = foldr (const (subst (foldr . const) ($ succNU []))) succNU
+ack = foldr (const g) succNU 
+    where g h = foldr (const h) (h (succNU []))
+-- ack = foldr (const (subst (foldr . const) ($ succNU []))) succNU
 -- ack = foldr (const (subst (foldr . const) (flip ($) (succNU [])))) succNU
 
 succNU :: NU -> NU
