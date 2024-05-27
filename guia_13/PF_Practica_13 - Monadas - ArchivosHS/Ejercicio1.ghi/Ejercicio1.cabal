@@ -1,0 +1,43 @@
+cabal-version:      2.4
+name:               Ejercicio1
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+-- synopsis:
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+-- license:
+author:             Fidel (modifications for GHC by Joaquín Colonello)
+maintainer:         fidel@unq.edu.ar
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+executable Ejercicio1
+    main-is:          Main.hs
+
+    -- Modules included in this executable, other than Main.
+    other-modules:
+        ErrorMonad
+        Eval
+        MaybeMonad
+        MiFalla
+        Monadas
+        OutputErrorMonad
+        OutputMonad
+        PowerOutputMonad
+        RevOutputMonad
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:    base ^>=4.14.1.0
+    hs-source-dirs:   app
+    default-language: Haskell2010
