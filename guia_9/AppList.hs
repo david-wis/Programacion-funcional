@@ -55,3 +55,36 @@ appListToList (Append a1 a2) = appListToList a1 ++ appListToList a2
 
 
 
+foldAP :: (a -> b) -> (b -> b -> b) -> AppList a -> b
+foldAP f g (Single x) = f x
+foldAP f g (Append l1 l2) = g (foldAP f g l1) (foldAP f g l2)
+
+recAP :: (a -> b) -> (AppList a -> AppList a -> b -> b -> b) -> AppList a -> b
+recAP f g (Single x) = f x
+recAP f g (Append l1 l2) = g l1 l2 (recAP f g l1) (recAP f g l2)
+
+lenAL' :: AppList a -> Int
+lenAL' = foldAP (const 1) (+)
+
+consAL' :: a -> AppList a -> AppList a
+consAL' e = recAP (\x -> Append (Single x) (Single e)) (\l1 l2 r1 r2 -> Append r1 l1)
+
+headAL' :: AppList a -> a
+headAL' = foldAP id const
+
+tailAL' :: AppList a -> AppList a
+tailAL' = recAP (error "Lista vacia") removeLeft
+        where removeLeft (Single _) l2 r1 r2 = l2
+              removeLeft l1 l2 r1 r2 = Append r1 r2
+
+snocAL' :: a -> AppList a -> AppList a
+snocAL' e = recAP (\x -> Append (Single x) (Single e)) (\l1 l2 r1 r2 -> Append l1 l2)
+
+elemAL' :: (Eq a) => a -> AppList a -> Bool
+elemAL' e = foldAP (==e) (||)
+
+appendAL' :: AppList a -> AppList a -> AppList a
+appendAL' = recAP (\x l' -> Append (Single x) l') (\l1 l2 r1 r2 l' -> Append (Append l1 l2) l')
+
+appListToList' :: AppList a -> [a]
+appListToList' = foldAP (:[]) (++)

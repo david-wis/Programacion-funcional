@@ -2,7 +2,8 @@ sum' :: [Int] -> Int
 sum' = foldr (+) 0
 
 length' :: [a] -> Int
-length' = foldr (\x l -> l + 1) 0
+-- length' = foldr (\x l -> l + 1) 0
+length' = foldr (const (+1)) 0
 
 map' :: (a -> b) -> [a] -> [b]
 map' f = foldr (\x ms -> f x : ms) []
@@ -24,7 +25,8 @@ delta True = 1
 delta False = 0
 
 countBy' :: (a -> Bool) -> [a] -> Int
-countBy' p = foldr (\x n -> delta (p x) + n) 0
+-- countBy' p = foldr (\x n -> delta (p x) + n) 0
+countBy' p = foldr ((+) . delta . p) 0
 
 partition :: (a -> Bool) -> [a] -> ([a], [a])
 partition p = foldr (\x (xs, ys) -> if p x then (x:xs, ys) else (xs, x:ys)) ([], [])
@@ -39,8 +41,9 @@ flip3 :: (a -> b -> c -> d) -> c -> b -> a -> d
 flip3 f x y z = f z y x
 
 scanr' :: (a -> b -> b) -> b -> [a] -> [b]
-scanr' = flip3 (foldr (\x h z f -> let (n:ns) = h z f 
-                                   in f x n : (n:ns)) (\z _ -> [z]))
+-- scanr' = flip3 (foldr (\x h z f -> let (n:ns) = h z f 
+--                                    in f x n : (n:ns)) (\z _ -> [z]))
+scanr' f z = foldr (\x rs@(r:_) -> f x r : rs) [z]
 
 
 takeWhile' :: (a -> Bool) -> [a] -> [a]

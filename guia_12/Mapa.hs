@@ -19,7 +19,7 @@ objects :: Mapa a -> [a]
 objects = foldM id id ((.)(.)(.) (++) (++))
 
 mapM :: (a -> b) -> Mapa a -> Mapa b
-mapM f = foldM (Cofre . map f) id (Bifurcacion . map f)
+mapM f = foldM (Cofre . map f) Nada (Bifurcacion . map f)
 
 has :: (a -> Bool) -> Mapa a -> Bool
 has p = foldM (any p) id (\xs b1 b2 -> any p xs || b1 || b2)

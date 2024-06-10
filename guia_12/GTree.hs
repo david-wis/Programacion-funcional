@@ -84,10 +84,18 @@ caminoHastaGT :: Eq a => a -> GTree a -> [a]
 caminoHastaGT e = foldGT (\x xs -> if e == x then [x] else x:xs) 
                          (foldr (\xs r -> if e `elem` xs then xs else r) [])
 
+caminoHastaGT' :: Eq a => a -> GTree a -> [a]
+caminoHastaGT' e = foldGT addIfExists buscarCamino
+                  where buscarCamino = foldr (\xs rs -> retIfEmpty xs rs xs) []
+                        addIfExists x xs = if x == e then [x]
+                                                     else retIfEmpty xs [] (x:xs)
+                        retIfEmpty [] x1 _ = x1
+                        retIfEmpty (_:_) _ x2 = x2
+
 nivelNGT :: GTree a -> Int -> [a]
 nivelNGT = foldGT g id
          where g x _ 0 = [x]
                g _ hs n = concat (map ($ n-1) hs)
 
--- t1 a b c d = GNode a [GNode b [], GNode c [], GNode d []]
--- t2 = GNode 4 [t1 1 0 2 3 , GNode 5 [], GNode 7 [GNode 6 [], GNode 8 []]]
+t1 a b c d = GNode a [GNode b [], GNode c [], GNode d []]
+t2 = GNode 4 [t1 1 0 2 3 , GNode 5 [], GNode 7 [GNode 6 [], GNode 8 []]]

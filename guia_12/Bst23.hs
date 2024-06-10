@@ -75,7 +75,7 @@ inOrder = fold23 [] (\_ _ ls x rs -> ls ++ [x] ++ rs)
 
 -- b)
 cantElem :: BST23 a -> Int
-cantElem = fold23 0 (\_ _ ln _ rn -> 1 + ln + rn) (\_ _ ln _ mn _ rn -> 1 + ln + mn + rn)
+cantElem = fold23 0 (\_ _ ln _ rn -> 1 + ln + rn) (\_ _ ln _ mn _ rn -> 2 + ln + mn + rn)
 
 -- c)
 height :: BST23 a -> Int
