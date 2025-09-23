@@ -85,6 +85,11 @@ caminoHasta :: (Eq a) => a -> Tree a -> [a]
 --                                            then [x]
 --                                            else y : if x `elem` r1 
 --                                                     then r1 else r2)
+-- caminoHasta' e = recT [] (\x t1 t2 c1 c2 -> if x == e then [x] else buscarCamino x c1 c2)
+--                where buscarCamino x [] [] = []
+--                      buscarCamino x c1 [] = x : c1
+--                      buscarCamino x _ c2 = x : c2
+
 caminoHasta e = foldT [] (\x c1 c2 -> if x == e then [x] else buscarCamino x c1 c2)
               where buscarCamino x [] [] = []
                     buscarCamino x c1 [] = x : c1

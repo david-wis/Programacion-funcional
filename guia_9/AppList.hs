@@ -21,9 +21,12 @@ tailAL (Single _) = error "Imposible"
 tailAL (Append (Single _) a2) = a2
 tailAL (Append a1 a2) = Append (tailAL a1) a2
 
-snocAL :: a -> AppList a -> AppList a
-snocAL e (Single e') = Append (Single e') (Single e)
-snocAL e (Append a1 a2) = Append a1 (consAL e a2)
+-- snocAL :: a -> AppList a -> AppList a
+-- snocAL e (Single e') = Append (Single e') (Single e)
+-- snocAL e (Append a1 a2) = Append a1 (consAL e a2)
+snocAL :: AppList a -> a -> AppList a
+snocAL (Single e') e = Append (Single e') (Single e)
+snocAL (Append a1 a2) e = Append a1 (consAL e a2)
 
 lastAL :: AppList a -> a
 lastAL (Single e') = e'

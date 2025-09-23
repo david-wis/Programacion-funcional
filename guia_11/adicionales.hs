@@ -79,6 +79,26 @@ addDigBinWithCarry I O O = (O, I)
 addDigBinWithCarry I O I = (I, O)
 addDigBinWithCarry I I O = (I, O)
 addDigBinWithCarry I I I = (I, I)
+
+-- Otra version:
+
+succNB' :: NBin -> NBin
+succNB' = recr [I] f
+       where f O bs _ = I : bs 
+             f I _ bs' = O : bs'
+
+addNB' :: NBin -> NBin -> NBin
+addNB' = foldr f id
+      where f b h [] = b : h []
+            f O h (O:bs') = O : h bs'
+            f O h (I:bs') = I : h bs'
+            f I h (O:bs') = I : h bs'            
+            f I h (I:bs') = O : h (succNB bs')  
+
+
+
+
+
 --                      
 
 type NU = [()] 

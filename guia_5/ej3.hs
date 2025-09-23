@@ -30,8 +30,26 @@ ddOfInt n = case n of
 
 --c)
 nextDD :: DigDec -> DigDec
-nextDD d = ddOfInt ((ddAsInt d + 1) `mod` 10)
+nextDD D0 = D1
+nextDD D1 = D2
+nextDD D2 = D3
+nextDD D3 = D4
+nextDD D4 = D5
+nextDD D5 = D6
+nextDD D6 = D7
+nextDD D7 = D8
+nextDD D8 = D9
+nextDD D9 = D0
 
 --d)
 prevDD :: DigDec -> DigDec
-prevDD d = ddOfInt ((ddAsInt d - 1) `mod` 10)
+prevDD D0 = D9
+prevDD D1 = D0
+prevDD D2 = D1
+prevDD D3 = D2
+prevDD D4 = D3
+prevDD D5 = D4
+prevDD D6 = D5
+prevDD D7 = D6
+prevDD D8 = D7
+prevDD D9 = D8

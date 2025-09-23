@@ -103,19 +103,20 @@ finishSucc'n O xs _ = I : xs
 finishSucc'n I _ xs' = O : xs'
 
 -- iv) 
-addNB :: NBin -> NBin -> NBin
-addNB [] ys = ys 
-addNB xs ys = succNB (addNB (decNB xs) ys)
+-- Versión que está mal:
+-- addNB :: NBin -> NBin -> NBin
+-- addNB [] ys = ys 
+-- addNB xs ys = succNB (addNB (decNB xs) ys)
 
-decNB :: NBin -> NBin
-decNB [] = error "Kaboom"
-decNB [I] = []
-decNB (O:xs) = I : decNB xs
-decNB (_:xs) = O : xs
+-- decNB :: NBin -> NBin
+-- decNB [] = error "Kaboom"
+-- decNB [I] = []
+-- decNB (O:xs) = I : decNB xs
+-- decNB (_:xs) = O : xs
 
 -- Version posta:
-addNB' :: NBin -> NBin -> NBin
-addNB' xs ys = addWithCarryNB xs ys O
+addNB :: NBin -> NBin -> NBin
+addNB xs ys = addWithCarryNB xs ys O
 
 addWithCarryNB :: NBin -> NBin -> DigBin -> NBin
 addWithCarryNB [] [] O = [] 
@@ -135,13 +136,13 @@ addDigBinWithCarry I I O = (I, O)
 addDigBinWithCarry I I I = (I, I)
 
 -- v)
+-- nb2n :: NBin -> N
+-- nb2n [] = Z
+-- nb2n xs = S (nb2n (decNB xs))
+
 nb2n :: NBin -> N
 nb2n [] = Z
-nb2n xs = S (nb2n (decNB xs))
-
-nb2n' :: NBin -> N
-nb2n' [] = Z
-nb2n' xs = nb2nPot xs 1 1
+nb2n xs = nb2nPot xs 1 1
 
 nb2nPot :: NBin -> Int -> Int -> N
 nb2nPot [] _ _ = Z
