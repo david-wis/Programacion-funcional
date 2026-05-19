@@ -120,9 +120,9 @@ rebuildListWithElem n (es:ess) e = es : rebuildListWithElem (n-1) ess e
 -- Precond: recibe un BST
 insertBST :: (Ord a) => a -> Tree a -> Tree a 
 insertBST e EmptyT = NodeT e EmptyT EmptyT
-insertBST e (NodeT e' t1 t2) = if e < e'
-                               then NodeT e' (insertBST e t1) t2
-                               else NodeT e' t1 (insertBST e t2) 
+insertBST e (NodeT e' t1 t2) = if e == e' then NodeT e t1 t2 
+                               else if e < e' then NodeT e' (insertBST e t1) t2
+                                    else NodeT e' t1 (insertBST e t2) 
 
 --listPerLevel $ insertBST 7 $ insertBST 3 $ insertBST 1 $ insertBST 2 $ insertBST 6 $ insertBST 4 $ insertBST 5 $ EmptyT
 
@@ -145,6 +145,16 @@ ramaMasLarga (NodeT e t1 t2) = if length l1 > length l2
                                else e : l2
                                where l1 = ramaMasLarga t1
                                      l2 = ramaMasLarga t2
+
+-- Forma mas eficiente:
+-- ramaMasLarga' :: Tree a -> [a]
+-- ramaMasLarga' = fst . ramaMasLargaWithH
+
+-- ramaMasLargaWithH :: Tree a -> ([a], Int)
+-- ramaMasLargaWithH  = foldT ([], 0) (\x (l1, h1) (l2, h2) -> addSelf x $ if h1 > h2 then (l1, h1) else (l2, h2))
+--                      where addSelf x (xs, n) = (x:xs, n+1)
+
+
 
 
 todosLosCaminos :: Tree a -> [[a]]

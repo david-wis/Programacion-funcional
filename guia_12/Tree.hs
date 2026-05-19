@@ -9,10 +9,11 @@ foldT z f (NodeT x t1 t2) = f x (foldT z f t1) (foldT z f t2)
 
 -- b)
 mapT :: (a -> b) -> Tree a -> Tree b
-mapT f = foldT EmptyT (NodeT . f)
+-- mapT f = foldT EmptyT (NodeT . f)
+mapT = foldT EmptyT . (NodeT .)
 
 sumT :: Tree Int -> Int
-sumT = foldT 0 ((.)(.)(.)(+)(+)) 
+sumT = foldT 0 ((.) (.) (.) (+) (+))
 
 sizeT :: Tree a -> Int
 sizeT = foldT 0 (const (\s1 s2 -> 1 + s1 + s2))
@@ -36,8 +37,8 @@ countByT :: (a -> Bool) -> Tree a -> Int
 countByT p = foldT 0 (\x e1 e2 -> delta (p x) + e1 + e2)
 
 partitionT :: (a -> Bool) -> Tree a -> ([a], [a])
-partitionT p = foldT ([], []) (\x (l1, l2) (r1, r2) -> if p x 
-                                                       then (x : l1 ++ r1, l2 ++ r2) 
+partitionT p = foldT ([], []) (\x (l1, l2) (r1, r2) -> if p x
+                                                       then (x : l1 ++ r1, l2 ++ r2)
                                                        else (l1 ++ r1, x : l2 ++ r2))
 
 zipWithT :: (a -> b -> c) -> Tree a -> Tree b -> Tree c
@@ -46,10 +47,18 @@ zipWithT f = foldT (const EmptyT) g
                  g x h1 h2 (NodeT y t1 t2) = NodeT (f x y) (h1 t1) (h2 t2)
 
 
+-- caminoMasLargo :: Tree a -> [a]
+-- caminoMasLargo = foldT [] (\x c1 c2 -> if length c1 > length c2
+--                                        then x:c1
+--                                        else x:c2)
+
 caminoMasLargo :: Tree a -> [a]
-caminoMasLargo = foldT [] (\x c1 c2 -> if length c1 > length c2 
-                                       then x:c1 
-                                       else x:c2) 
+caminoMasLargo = snd . caminoMasLargo'
+
+caminoMasLargo' :: Tree a -> ([a], Int)
+caminoMasLargo' = foldT ([], 0) g
+               where g x t1@(_, n1) t2@(_, n2) = let (c, n) = if n1 > n2 then t1 else t2
+                                                   in (x:c, n+1)
 
 todosLosCaminos :: Tree a -> [[a]]
 todosLosCaminos = foldT [] (\x cs1 cs2 -> [x] : foldr ((:) . (:) x) [] (cs1 ++ cs2))
@@ -75,10 +84,10 @@ recT z f EmptyT = z
 recT z f (NodeT x t1 t2) = f x t1 t2 (recT z f t1) (recT z f t2)
 
 -- d)
-insertT :: (Ord a) => a -> Tree a -> Tree a 
-insertT x = recT (NodeT x EmptyT EmptyT) (\y t1 t2 r1 r2 -> if x > y 
-                                                            then NodeT y t1 r2 
-                                                            else NodeT y r1 t2)
+insertT :: (Ord a) => a -> Tree a -> Tree a
+insertT x = recT (NodeT x EmptyT EmptyT) (\y t1 t2 r1 r2 -> if x == y then NodeT x t1 t2
+                                                            else if x < y then NodeT y t1 r2
+                                                                 else NodeT y r1 t2)
 
 caminoHasta :: (Eq a) => a -> Tree a -> [a]
 -- caminoHasta x = recT [] (\y t1 t2 r1 r2 -> if x == y 

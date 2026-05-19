@@ -36,6 +36,11 @@ zipWith' = flip (foldr (\x h f ys -> case ys of
                                       [] -> []
                                       (y':ys') -> f x y' : h f ys') (\_ _ -> []))
 
+zipWith'' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith'' f = foldr g (const [])
+            where g _ _ [] = []
+                  g x h (y:ys) = f x y : h ys
+
 
 flip3 :: (a -> b -> c -> d) -> c -> b -> a -> d
 flip3 f x y z = f z y x

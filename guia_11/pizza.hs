@@ -42,13 +42,17 @@ soloLasCapasQue p (Capa i pizza) = if p i then Capa i (soloLasCapasQue p pizza)
 
 -- Ej 2
 sinLactosa :: Pizza -> Pizza
-sinLactosa = soloLasCapasQue (/= Queso) 
+sinLactosa = soloLasCapasQue (not . esQueso) 
+
+esQueso :: Ingrediente -> Bool
+esQueso Queso = True
+esQueso _ = False
 
 aptaIntolerantesLactosa :: Pizza -> Bool
-aptaIntolerantesLactosa = (== 0) . cantidadCapasQueCumplen (== Queso) 
+aptaIntolerantesLactosa = (== 0) . cantidadCapasQueCumplen esQueso
 
 cantidadDeQueso :: Pizza -> Int
-cantidadDeQueso = cantidadCapasQueCumplen (== Queso) 
+cantidadDeQueso = cantidadCapasQueCumplen esQueso
 
 conElDobleDeAceitunas :: Pizza -> Pizza
 conElDobleDeAceitunas = conCapasTransformadas duplicarAceitunas
